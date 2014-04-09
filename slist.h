@@ -28,13 +28,13 @@ template <typename T>
 class SListIterator;
 
 template <typename T>
-bool operator==(SListIterator<T> lhs, SListIterator<T> rhs)
+bool operator==(const SListIterator<T> & lhs, const SListIterator<T> & rhs)
 {
 	return (lhs._itm == rhs._itm);
 }
 
 template <typename T>
-bool operator!=(SListIterator<T> lhs, SListIterator<T> rhs)
+bool operator!=(const SListIterator<T> & lhs, const SListIterator<T> & rhs)
 {
 	return !(lhs._itm == rhs._itm);
 }
@@ -58,8 +58,8 @@ public:
 	T & operator*();
 	LLItem<T>* operator->();
 
-	friend bool operator== <> (SListIterator<T> lhs, SListIterator<T> rhs);
-	friend bool operator!= <> (SListIterator<T> lhs, SListIterator<T> rhs);
+	friend bool operator== <> (const SListIterator<T> & lhs, const SListIterator<T> & rhs);
+	friend bool operator!= <> (const SListIterator<T> & lhs, const SListIterator<T> & rhs);
 };
 
 template <typename T>
