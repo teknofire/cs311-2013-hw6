@@ -142,28 +142,28 @@ public:
 	 * May throw std::bad_alloc
 	 */
     template <typename InputIterator>
-    void read(InputIterator first, InputIterator last)
-    {
-    	clear();
-
-    	LLItem<T>* itm;
-
-    	try
-    	{
-    		for(auto itr = first; itr != last; itr++)
-    		{
-				itm = new LLItem<T>();
-				itm->_value = *itr;
-				link_item_end(itm);
-    		}
-    	}
-    	catch(...)
-    	{
-    		delete itm;
-    		clear();
-    		throw;
-    	}
-    }
+    void read(InputIterator first, InputIterator last);
+//    {
+//    	clear();
+//
+//    	LLItem<T>* itm;
+//
+//    	try
+//    	{
+//    		for(auto itr = first; itr != last; itr++)
+//    		{
+//				itm = new LLItem<T>();
+//				itm->_value = *itr;
+//				link_item_end(itm);
+//    		}
+//    	}
+//    	catch(...)
+//    	{
+//    		delete itm;
+//    		clear();
+//    		throw;
+//    	}
+//    }
 
     /*
      * void write(OutputIterator dest)
@@ -457,6 +457,38 @@ template <typename T>
 typename SList<T>::iterator SList<T>::end() const
 {
 	return iterator(NULL);
+}
+
+/*
+ * void read(InputIterator first, InputIterator last)
+ * Preconditions: the given arguments are valid Iterators
+ * Postconditions: this will contain a copy of the given range
+ * Exception Guarantee: Basic, Exception Neutral
+ * May throw std::bad_alloc
+ */
+template <typename T>
+template <typename InputIterator>
+void SList<T>::read(InputIterator first, InputIterator last)
+{
+	clear();
+
+	LLItem<T>* itm;
+
+	try
+	{
+		for(auto itr = first; itr != last; itr++)
+		{
+			itm = new LLItem<T>();
+			itm->_value = *itr;
+			link_item_end(itm);
+		}
+	}
+	catch(...)
+	{
+		delete itm;
+		clear();
+		throw;
+	}
 }
 
 #endif
