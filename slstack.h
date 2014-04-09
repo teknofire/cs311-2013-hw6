@@ -1,8 +1,8 @@
 /*
- * slstack.h
- *
- *  Created on: Apr 8, 2014
- *      Author: Will
+ *  slstack.h
+ *  CS311 Homework #6 Exercise b
+ *  Created on: April 8, 2014
+ *      Authors: Will Fisher, Karl Oder, Cody Gaines
  */
 
 #ifndef SLSTACK_H_
