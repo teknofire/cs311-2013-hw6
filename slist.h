@@ -359,13 +359,25 @@ typename SList<T>::size_type SList<T>::size() const
 	return _size;
 }
 
+/* void SList<T>::push_front(const T & value)
+ * Preconditions: none
+ * Postconditions:
+ * 		returns reference to first value in the list
+ * Exception Guarantee: No throw
+ */
 template <typename T>
 T & SList<T>::front() const
 {
 	return _first->_value;
 }
 
-// strong guarantee
+/* void SList<T>::push_front(const T & value)
+ * Preconditions:
+ * Postconditions:
+ * 		adds the given value to the front of the list
+ * Exception Guarantee: Strong Guarantee
+ * May throw std::bad_alloc
+ */
 template <typename T>
 void SList<T>::push_front(const T & value)
 {
@@ -398,6 +410,12 @@ void SList<T>::push_front(const T & value)
 	_first = itm;
 }
 
+/* void SList<T>::pop_front()
+ * Preconditions: none
+ * Postconditions:
+ * 		removes the first item from the list
+ * Strong Guarantee
+ */
 template <typename T>
 void SList<T>::pop_front()
 {
@@ -419,7 +437,7 @@ void SList<T>::reverse()
 	for(auto i = 0; i < _size; i++)
 	{
 		auto newitm = itm->_next;
-		LLItem<T>* temp = itm->_prev;
+		auto temp = itm->_prev;
 		itm->_prev = itm->_next;
 		itm->_next = temp;
 		itm = newitm;
