@@ -109,76 +109,19 @@ template <typename T>
 class SList
 {
 public:
-typedef std::size_t size_type;
-typedef SListIterator<T> iterator;
+	typedef std::size_t size_type;
+	typedef SListIterator<T> iterator;
 
 private:
 	LLItem<T>* _first;
 	LLItem<T>* _end;
 	size_type _size;
 
-	void clear() //Empty the list, doesn't use the iterator for no-throw
-	{
-		if(!_size) //Already done if we are already clear
-			return;
+	void clear(); //Empty the list, doesn't use the iterator for no-throw
+	void link_item_end(LLItem<T>* itm); //Links an item to the end of the list
 
-		auto start = _first;
-		start = start->_next;
-
-		for(auto i = start; i != NULL; i=i->_next) //Walk the list, deleting the previous item
-		{
-			auto val = i->_prev;
-			delete val;
-		}
-		delete _end; //Delete the last item
-
-		_size = 0; //Reset
-		_first = NULL;
-		_end = NULL;
-	}
-
-	void link_item_end(LLItem<T>* itm) //Links an item to the end of the list
-	{
-		if(!_first)
-		{
-			_first = itm;
-			_end = itm;
-			itm->_prev = 0;
-			itm->_next = 0;
-		}
-		else
-		{
-			_end->_next = itm;
-			itm->_prev = _end;
-			itm->_next = 0;
-			_end = itm;
-		}
-		_size++;
-	}
-
-	/*
-	 * begin()
-	 * Preconditions:
-	 * 	None
-	 * Postconditions:
-	 * 	returns an iterator to the first item
-	 */
-	iterator begin() const
-	{
-		return iterator(_first);
-	}
-
-	/*
-	 * end()
-	 * Preconditions:
-	 * 	None
-	 * Postconditions:
-	 * 	returns an iterator to NULL (end of list)
-	 */
-	iterator end() const
-	{
-		return iterator(NULL);
-	}
+	iterator begin() const;
+	iterator end() const;
 
 public:
 	~SList();
@@ -448,4 +391,72 @@ void SList<T>::reverse()
 	_end = temp;
 
 }
+
+template <typename T>
+void SList<T>::clear() //Empty the list, doesn't use the iterator for no-throw
+{
+	if(!_size) //Already done if we are already clear
+		return;
+
+	auto start = _first;
+	start = start->_next;
+
+	for(auto i = start; i != NULL; i=i->_next) //Walk the list, deleting the previous item
+	{
+		auto val = i->_prev;
+		delete val;
+	}
+	delete _end; //Delete the last item
+
+	_size = 0; //Reset
+	_first = NULL;
+	_end = NULL;
+}
+
+template <typename T>
+void SList<T>::link_item_end(LLItem<T>* itm) //Links an item to the end of the list
+{
+	if(!_first)
+	{
+		_first = itm;
+		_end = itm;
+		itm->_prev = 0;
+		itm->_next = 0;
+	}
+	else
+	{
+		_end->_next = itm;
+		itm->_prev = _end;
+		itm->_next = 0;
+		_end = itm;
+	}
+	_size++;
+}
+
+/*
+ * begin()
+ * Preconditions:
+ * 	None
+ * Postconditions:
+ * 	returns an iterator to the first item
+ */
+template <typename T>
+typename SList<T>::iterator SList<T>::begin() const
+{
+	return iterator(_first);
+}
+
+/*
+ * end()
+ * Preconditions:
+ * 	None
+ * Postconditions:
+ * 	returns an iterator to NULL (end of list)
+ */
+template <typename T>
+typename SList<T>::iterator SList<T>::end() const
+{
+	return iterator(NULL);
+}
+
 #endif
