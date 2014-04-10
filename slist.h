@@ -134,61 +134,11 @@ public:
 	void push_front(const T & value);
 	void pop_front();
 
-	/*
-	 * void read(InputIterator first, InputIterator last)
-	 * Preconditions: the given arguments are valid Iterators
-	 * Postconditions: this will contain a copy of the given range
-	 * Exception Guarantee: Basic, Exception Neutral
-	 * May throw std::bad_alloc
-	 */
     template <typename InputIterator>
     void read(InputIterator first, InputIterator last);
-//    {
-//    	clear();
-//
-//    	LLItem<T>* itm;
-//
-//    	try
-//    	{
-//    		for(auto itr = first; itr != last; itr++)
-//    		{
-//				itm = new LLItem<T>();
-//				itm->_value = *itr;
-//				link_item_end(itm);
-//    		}
-//    	}
-//    	catch(...)
-//    	{
-//    		delete itm;
-//    		clear();
-//    		throw;
-//    	}
-//    }
 
-    /*
-     * void write(OutputIterator dest)
-     * Preconditions:
-     * 	 dest must be a valid OutputIterator and have enough space to hold the values
-     * Postconditions:
-     *   dest will contain the copied values from this
-     * Exception Guarantee: Basic, Exception-Neutral
-     */
     template <typename OutputIterator>
-    void write(OutputIterator dest) const
-    {
-    	try
-    	{
-    		for(auto i = begin(); i != end(); i++)
-    		{
-    		*dest++=i->_value;
-    		}
-    	}
-    	catch(...)
-    	{
-    		throw;
-    	}
-    }
-
+    void write(OutputIterator dest) const;
 
     void reverse();
 };
@@ -487,6 +437,31 @@ void SList<T>::read(InputIterator first, InputIterator last)
 	{
 		delete itm;
 		clear();
+		throw;
+	}
+}
+
+/*
+ * void write(OutputIterator dest)
+ * Preconditions:
+ * 	 dest must be a valid OutputIterator and have enough space to hold the values
+ * Postconditions:
+ *   dest will contain the copied values from this
+ * Exception Guarantee: Basic, Exception-Neutral
+ */
+template <typename T>
+template <typename OutputIterator>
+void SList<T>::write(OutputIterator dest) const
+{
+	try
+	{
+		for(auto i = begin(); i != end(); i++)
+		{
+		*dest++=i->_value;
+		}
+	}
+	catch(...)
+	{
 		throw;
 	}
 }
