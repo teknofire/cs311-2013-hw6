@@ -11,6 +11,7 @@
 
 #include <cstddef> //size_t
 #include <stdexcept> //range_error
+#include <iostream>
 
 //Item storage class for a double-linked list
 //Invariants
@@ -20,20 +21,51 @@ template <typename T>
 class LLItem
 {
 public:
+	~LLItem();
+
 	LLItem<T>* _prev;
 	LLItem<T>* _next;
 	T _value;
 };
 
+/*
+ * ~LLItem (dtor)
+ * Preconditions: none
+ * Postconditions: free's memory allocated and owned by *this
+ * No-throw
+ */
+template <typename T>
+LLItem<T>::~LLItem()
+{
+	if(_next)
+		delete _next;
+}
+
+/*
+ * template of the SListIterator class to allow friend of template function to work
+ */
 template <typename T>
 class SListIterator;
 
+
+/*
+ * operator==
+ * Preconditions: none
+ * Postconditions: returns true if given item values are ==, returns false otherwise
+ * No-throw
+ */
 template <typename T>
 bool operator==(const SListIterator<T> & lhs, const SListIterator<T> & rhs)
 {
 	return (lhs._itm == rhs._itm);
 }
 
+/*
+ * operator!=
+ * Preconditions: none
+ * Postconditions: returns true if given item values are not equal, returns false otherwise
+ * No-throw
+ */
 template <typename T>
 bool operator!=(const SListIterator<T> & lhs, const SListIterator<T> & rhs)
 {
@@ -63,15 +95,39 @@ public:
 	friend bool operator!= <> (const SListIterator<T> & lhs, const SListIterator<T> & rhs);
 };
 
+/*
+ * Copy ctor
+ * Preconditions: none
+ * Postconditions: *this will contain a copy of the given item
+ * Strong guarantee
+ */
 template <typename T>
 SListIterator<T>::SListIterator(LLItem<T>* item): _itm(item){};
 
+/*
+ * operator++ (pre increment)
+ * Preconditions: none
+ * Postconditions: increments iterator to the next item in the list
+ * No-throw
+ */
 template <typename T>
 SListIterator<T>& SListIterator<T>::operator++(){_itm = _itm->_next; return *this;}
 
+/*
+ * operator-- (pre decrement)
+ * Preconditions: none
+ * Postconditions: increments iterator to the previous item in the list and returns it
+ * No-throw
+ */
 template <typename T>
 SListIterator<T>& SListIterator<T>::operator--(){_itm = _itm->_prev; return *this;}
 
+/*
+ * operator++ (post increment)
+ * Preconditions: none
+ * Postconditions: decrements iterator to the next item in the list and returns it
+ * No-throw
+ */
 template <typename T>
 SListIterator<T> SListIterator<T>::operator++(int)
 {
@@ -80,6 +136,12 @@ SListIterator<T> SListIterator<T>::operator++(int)
 	return tmp;
 }
 
+/*
+ * operator-- (post decrement)
+ * Preconditions: none
+ * Postconditions: decrements iterator to the previous item in the list and returns current item
+ * No-throw
+ */
 template <typename T>
 SListIterator<T> SListIterator<T>::operator--(int)
 {
@@ -88,9 +150,21 @@ SListIterator<T> SListIterator<T>::operator--(int)
 	return tmp;
 }
 
+/*
+ * operator*
+ * Preconditions: none
+ * Postconditions: returns value of item
+ * No-throw
+ */
 template <typename T>
 T & SListIterator<T>::operator*(){return _itm->_value;}
 
+/*
+ * operator->
+ * Preconditions: none
+ * Postconditions: returns item
+ * No-throw
+ */
 template <typename T>
 LLItem<T>* SListIterator<T>::operator->(){return _itm;}
 
@@ -323,7 +397,10 @@ void SList<T>::pop_front()
 		else
 			_end = NULL;
 		_first = _first->_next;
+
+		itm->_next = NULL;
 		delete itm;
+
 		_size--;
 	}
 }
@@ -353,27 +430,32 @@ void SList<T>::reverse()
 
 }
 
+/*
+ * clear
+ * Preconditions: None
+ * Postconditions: list will be empty
+ * Exception Guarantee: No-Throw
+ */
 template <typename T>
 void SList<T>::clear() //Empty the list, doesn't use the iterator for no-throw
 {
 	if(!_size) //Already done if we are already clear
 		return;
 
-	auto start = _first;
-	start = start->_next;
-
-	for(auto i = start; i != NULL; i=i->_next) //Walk the list, deleting the previous item
-	{
-		auto val = i->_prev;
-		delete val;
-	}
-	delete _end; //Delete the last item
+	if(_first)
+		delete _first;
 
 	_size = 0; //Reset
 	_first = NULL;
 	_end = NULL;
 }
 
+/*
+ * link_item_end
+ * Preconditions: None
+ * Postconditions: given item will be linked at the end of the list
+ * Exception Guarantee: No-Throw
+ */
 template <typename T>
 void SList<T>::link_item_end(LLItem<T>* itm) //Links an item to the end of the list
 {
