@@ -10,6 +10,7 @@
 #define _SLIST_H
 
 #include <cstddef> //size_t
+#include <stdexcept> //range_error
 
 //Item storage class for a double-linked list
 //Invariants
@@ -252,16 +253,18 @@ typename SList<T>::size_type SList<T>::size() const
 	return _size;
 }
 
-/* void SList<T>::push_front(const T & value)
+/* T & SList<T>::front()
  * Preconditions: none
  * Postconditions:
  * 		returns reference to first value in the list
- * Exception Guarantee: No throw
+ * Exception Guarantee: Strong, may throw std::range_error
  */
 template <typename T>
 T & SList<T>::front() const
 {
-	return _first->_value;
+	if(_first)
+		return _first->_value;
+	throw std::range_error("Tried to return front of empty list!");
 }
 
 /* void SList<T>::push_front(const T & value)
@@ -307,7 +310,7 @@ void SList<T>::push_front(const T & value)
  * Preconditions: none
  * Postconditions:
  * 		removes the first item from the list
- * Strong Guarantee
+ * No-Throw
  */
 template <typename T>
 void SList<T>::pop_front()
@@ -325,6 +328,12 @@ void SList<T>::pop_front()
 	}
 }
 
+/*
+ * void SList<T>::reverse(): Reverses the order of the list
+ * Preconditions: None
+ * Postconditions: The list now contains the same contents in oposite order
+ * Exception Guarantee: No-Throw
+ */
 template <typename T>
 void SList<T>::reverse()
 {
