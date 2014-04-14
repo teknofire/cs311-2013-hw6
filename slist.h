@@ -11,7 +11,6 @@
 
 #include <cstddef> //size_t
 #include <stdexcept> //range_error
-#include <iostream>
 
 //Item storage class for a double-linked list
 //Invariants
