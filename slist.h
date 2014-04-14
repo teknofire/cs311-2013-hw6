@@ -317,6 +317,8 @@ void SList<T>::pop_front()
 		auto itm = _first;
 		if(_first->_next)
 			_first->_next->_prev = NULL;
+		else
+			_end = NULL;
 		_first = _first->_next;
 		delete itm;
 		_size--;
